@@ -1,0 +1,47 @@
+service: serverless-test-lambda
+
+frameworkVersion: '3'
+
+provider:
+  name: aws
+  runtime: nodejs14.x
+  #default to 'dev' if unspecified
+  stage: dev
+  #profile: ${self:custom.profiles.${sls:stage}}
+  # Default region (default: us-east-1)
+  region: us-east-2
+  # Optional CloudFormation tags to apply to APIs and functions
+  tags:
+    costcenter: tnc
+    solution: helloworld
+    environment: dev
+  # Optional CloudFormation tags to apply to the stack
+  stackTags:
+    costcenter: tnc
+  # Duration for CloudWatch log retention (default: forever)
+  # Valid values: https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-logs-loggroup.html
+  logRetentionInDays: 14
+  # Use function versioning (enabled by default)
+  versionFunctions: true
+  # Processor architecture: 'x86_64' or 'arm64' via Graviton2 (default: x86_64)
+  architecture: arm64
+  	
+  tracing:
+    # Can only be true if API Gateway is inside a stack.
+    #apiGateway: true
+    # Optional, can be true (true equals 'Active'), 'Active' or 'PassThrough'
+    lambda: true
+
+# custom:
+#   profiles:
+#     test: testrole
+#     dev: dev
+
+functions:
+  hello:
+    #handler: handler.hello
+    handler: src/handler.hello
+    # Override the Lambda function name
+    name: ${sls:stage}-serverlesslambda
+    description: Serverless Framework deployed function
+  
