@@ -1,0 +1,37 @@
+---
+version: 0.2
+phases:
+  install: 
+    runtime-versions: 
+      nodejs: 14
+    commands: 
+      - npm update -y
+  pre_build:
+    commands:
+      - aws --version
+      - echo installing serverless framework 
+      #- echo login to DockerHub to avoid pull rate limit
+      #- docker login -u "$DOCKER_USER_NAME" -p "$DOCKER_USER_PASSWORD"
+      #- SHA=$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | head -c 8)
+      #- REPOSITORY="$DOCKER_REGISTRY_URI:$(date +%Y-%m-%d_%H.%M.%S).$SHA"
+      #- $(aws ecr get-login --no-include-email)
+      - npm install -g serverless
+      - npm install
+  build:
+    commands:
+      #- docker build --tag $REPOSITORY .
+      #- serverless deploy --stage ${STAGE_NAME}
+      - serverless deploy --stage ${STAGE_NAME}
+  post_build:
+    commands:
+      #- docker push $REPOSITORY
+      #- cat specfiles/deploy.json | jq --arg SHA "$SHA" '. + {"Sha":$SHA}' > tmp.json && mv tmp.json specfiles/deploy.json
+      #- cat specfiles/deploy.json | jq --arg REPOSITORY "$REPOSITORY" '. + {"ContainerImage":$REPOSITORY}' > tmp.json && mv tmp.json specfiles/deploy.json
+      #- cat specfiles/deploy.json | jq --arg CONFIG_FILE "$(base64 specfiles/canary-helper.yaml)" '. + {"CanaryTemplate":$CONFIG_FILE}' > tmp.json && mv tmp.json specfiles/deploy.json
+      #- cat specfiles/deploy.json
+      - echo Build completed on `date`
+artifacts:
+  files:
+    #- specfiles/deploy.json
+    - '*'
+  discard-paths: yes
