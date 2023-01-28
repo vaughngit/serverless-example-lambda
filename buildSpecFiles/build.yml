@@ -29,6 +29,7 @@ phases:
       #- cat specfiles/deploy.json | jq --arg REPOSITORY "$REPOSITORY" '. + {"ContainerImage":$REPOSITORY}' > tmp.json && mv tmp.json specfiles/deploy.json
       #- cat specfiles/deploy.json | jq --arg CONFIG_FILE "$(base64 specfiles/canary-helper.yaml)" '. + {"CanaryTemplate":$CONFIG_FILE}' > tmp.json && mv tmp.json specfiles/deploy.json
       #- cat specfiles/deploy.json
+      - echo test
       - echo Build completed on `date`
 artifacts:
   files:
