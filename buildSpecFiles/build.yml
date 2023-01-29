@@ -21,7 +21,7 @@ phases:
     commands:
       #- docker build --tag $REPOSITORY .
       #- serverless deploy --stage ${STAGE_NAME}
-      - serverless deploy --stage ${STAGE_NAME}
+      - serverless deploy 
   post_build:
     commands:
       #- docker push $REPOSITORY
