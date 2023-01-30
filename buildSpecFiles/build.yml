@@ -16,7 +16,7 @@ phases:
       #- REPOSITORY="$DOCKER_REGISTRY_URI:$(date +%Y-%m-%d_%H.%M.%S).$SHA"
       #- $(aws ecr get-login --no-include-email)
       - npm install -g serverless
-      - npm install
+      #- npm install
   build:
     commands:
       #- docker build --tag $REPOSITORY .
@@ -29,7 +29,7 @@ phases:
       #- cat specfiles/deploy.json | jq --arg REPOSITORY "$REPOSITORY" '. + {"ContainerImage":$REPOSITORY}' > tmp.json && mv tmp.json specfiles/deploy.json
       #- cat specfiles/deploy.json | jq --arg CONFIG_FILE "$(base64 specfiles/canary-helper.yaml)" '. + {"CanaryTemplate":$CONFIG_FILE}' > tmp.json && mv tmp.json specfiles/deploy.json
       #- cat specfiles/deploy.json
-      - echo test
+      #- echo test
       - echo Build completed on `date`
 artifacts:
   files:
