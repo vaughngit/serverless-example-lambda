@@ -4,6 +4,8 @@ frameworkVersion: '3'
 
 provider:
   name: aws
+  deploymentBucket:
+    name: lambda-cicd-stack-s3bucketforpipelineartifacts5f0-16qc0kik0r39m
   runtime: nodejs14.x
   #default to 'dev' if unspecified
   stage: dev
