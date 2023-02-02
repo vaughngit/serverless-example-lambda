@@ -45,5 +45,8 @@ functions:
     handler: src/handler.hello
     # Override the Lambda function name
     name: ${sls:stage}-serverlesslambda
-    description: Serverless Framework deployed function
+    description: Serverless Framework deployed function	
+    # https://www.serverless.com/framework/docs/providers/aws/guide/layers#using-your-layers
+    layers:
+      - arn:aws:lambda:${aws:region}:094274105915:layer:AWSLambdaPowertoolsTypeScript:6
   
