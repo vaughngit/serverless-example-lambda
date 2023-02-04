@@ -33,10 +33,13 @@ provider:
   versionFunctions: true
   # Processor architecture: 'x86_64' or 'arm64' via Graviton2 (default: x86_64)
   architecture: arm64
-  # environment:
-  #   # define the ARN of the function that you want to invoke
-  #   FUNCTION_ARN: "arn:aws:lambda:${self:provider.region}:${aws:accountId}:function:${self:service}-${self:provider.stage}-lambdaTwo"  
-
+  environment:
+    NODE_OPTIONS: '--enable-source-maps'
+    POWERTOOLS_SERVICE_NAME: ${self:service}-${self:provider.stage},
+    POWERTOOLS_METRICS_NAMESPACE: ${self:functions.hello.name},
+    LOG_LEVEL: 'DEBUG'  #/** Log Levels */ 'DEBUG' | 'INFO' | 'WARN' | 'ERROR';
+    POWERTOOLS_LOGGER_LOG_EVENT: 'true' # 'true' : 'false',
+    POWERTOOLS_TRACER_CAPTURE_RESPONSE: true # ? 'true' : 'false', 
   	
   tracing:
     # Can only be true if API Gateway is inside a stack.
@@ -75,7 +78,7 @@ functions:
         evaluationPeriods: 1
         comparisonOperator: GreaterThanOrEqualToThreshold
     deploymentSettings:
-      type: Linear10PercentEvery1Minute
+      type: Canary10Percent5Minutes
       alias: dev
       preTrafficHook: preHook
       postTrafficHook: postHook
