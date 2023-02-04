@@ -13,6 +13,12 @@ provider:
   # Default region (default: us-east-1)
   region: us-east-2
   # Optional CloudFormation tags to apply to APIs and functions
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - codedeploy:*
+      Resource:
+        - "*"
   tags:
     costcenter: tnc
     solution: helloworld
@@ -38,7 +44,13 @@ provider:
     # Optional, can be true (true equals 'Active'), 'Active' or 'PassThrough'
     lambda: true
 
-# custom:
+plugins:
+  - serverless-plugin-aws-alerts
+  - serverless-plugin-canary-deployments
+
+custom:	
+  alerts:
+    dashboards: true
 #   profiles:
 #     test: testrole
 #     dev: dev
@@ -53,7 +65,26 @@ functions:
     # https://www.serverless.com/framework/docs/providers/aws/guide/layers#using-your-layers
     layers:
       - arn:aws:lambda:${aws:region}:094274105915:layer:AWSLambdaPowertoolsTypeScript:6
-
+    alarms:
+      - name: foo
+        namespace: 'AWS/Lambda'
+        metric: Errors
+        threshold: 1
+        statistic: Minimum
+        period: 60
+        evaluationPeriods: 1
+        comparisonOperator: GreaterThanOrEqualToThreshold
+    deploymentSettings:
+      type: Linear10PercentEvery1Minute
+      alias: dev
+      preTrafficHook: preHook
+      postTrafficHook: postHook
+      alarms:
+        - HelloFooAlarm    	
+  preHook:
+    handler: hooks.pre
+  postHook:
+    handler: hooks.post
 resources:
   Outputs:
     HelloLambdaFunctionArn:
