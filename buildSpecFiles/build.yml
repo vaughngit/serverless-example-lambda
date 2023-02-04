@@ -16,7 +16,7 @@ phases:
       #- REPOSITORY="$DOCKER_REGISTRY_URI:$(date +%Y-%m-%d_%H.%M.%S).$SHA"
       #- $(aws ecr get-login --no-include-email)
       - npm install -g serverless
-      #- npm install
+      - npm install
   build:
     commands:
       #- docker build --tag $REPOSITORY .
